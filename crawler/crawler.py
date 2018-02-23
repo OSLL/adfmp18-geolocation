@@ -62,6 +62,7 @@ def load_page(idx):
         res['img'] = img_name
         res['latitude'] = meta['latitude']
         res['longitude'] = meta['longitude']
+        res['year'] = meta['year']
         res['id'] = idx
 
     return res
@@ -100,6 +101,7 @@ def main(start, end, meta_fname):
                     data['img'].append(val['img'])
                     data['latitude'].append(val['latitude'])
                     data['longitude'].append(val['longitude'])
+                    data['year'].append(val['year'])
                     data['id'].append(val['id'])
 
                 pbar.update()
