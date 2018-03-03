@@ -17,7 +17,7 @@
   * N. successfully finishes the task. The statistics are recorded, 
   the picture is added to the Gallery.
   
-1. N. wants to see how nice their performance is / show their results to friends or relatives.
+2. N. wants to see how nice their performance is / show their results to friends or relatives.
   * N. opens the App.
   * On the main screen N. presses the "Stats" / "Gallery" button. 
   The results are displayed.
