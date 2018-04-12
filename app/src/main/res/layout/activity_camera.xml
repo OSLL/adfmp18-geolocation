@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:orientation="vertical">
-
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
         tools:context="ru.spbau.adfmp18_geolocation.CameraActivity">
@@ -20,20 +15,22 @@
     that my phone's normal camera is dead =\-->
     <com.google.android.cameraview.CameraView
             android:id="@+id/camera"
-            android:layout_width="368dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:keepScreenOn="true"
             android:adjustViewBounds="true"
+            android:layout_weight="0.8"
             app:autoFocus="true"
             app:aspectRatio="4:3"
             app:facing="front"
             app:flash="auto" tools:layout_editor_absoluteY="0dp" tools:layout_editor_absoluteX="8dp"/>
 
     <LinearLayout
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:weightSum="2"
+            android:layout_weight="0.2"
             android:gravity="center">
         <Button
                 android:layout_height="wrap_content"
@@ -44,5 +41,3 @@
     </LinearLayout>>
 
 </LinearLayout>
-
-</ScrollView>
