@@ -3,6 +3,7 @@ package ru.spbau.adfmp18_geolocation
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_camera.*
+import ru.spbau.adfmp18_geolocation.R.id.camera
 
 class CameraActivity : AppCompatActivity() {
 
