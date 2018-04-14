@@ -4,4 +4,8 @@
     <string name="gallery">Gallery</string>
     <string name="stats">Stats</string>
     <string name="capture">Capture!</string>
+    <string name="title_activity_result">ResultActivity</string>
+    <string name="this_is_a_match">This is a match!</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="_continue">Continue</string>
 </resources>

@@ -20,8 +20,8 @@
         android:id="@+id/camera_image"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.5"/>
-        <!--android:src="@drawable/android"-->
+        android:layout_weight="0.5"
+        android:src="@drawable/sea_cath_1"/>
 
         <!--IMPORTANT:
         camera is facing FRONT for the one single reason
