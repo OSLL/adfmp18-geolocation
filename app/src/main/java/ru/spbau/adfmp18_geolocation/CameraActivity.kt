@@ -1,6 +1,6 @@
 package ru.spbau.adfmp18_geolocation
 
-import android.app.PendingIntent.getActivity
+import android.content.Intent
 import android.hardware.Camera
 import android.hardware.Camera.PictureCallback
 import android.hardware.Camera.getNumberOfCameras
@@ -8,10 +8,8 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.View
 import kotlinx.android.synthetic.main.activity_camera.*
-import android.content.Intent
-
-
 
 
 class CameraActivity : AppCompatActivity() {
@@ -64,13 +62,21 @@ class CameraActivity : AppCompatActivity() {
         return null // just so that kotlin does not complain
     }
 
+    fun showResults(v: View) {
+        Log.e(TAG, "SHOW RESULT")
+
+        val intent = Intent(this, ResultActivity::class.java)
+        startActivity(intent)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
-        val mCamera = getCameraInstance()
-        capture_button.setOnClickListener({ _ ->
-            mCamera?.takePicture(null, null, mPicture)})
+// TODO:        val mCamera = getCameraInstance()
+        capture_button.setOnClickListener(::showResults)
+// TODO: { _ -> mCamera?.takePicture(null, null, mPicture)})
+
     }
 
     override fun onResume() {
