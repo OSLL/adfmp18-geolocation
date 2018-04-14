@@ -159,9 +159,9 @@ class photosDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                         DBContract.PhotoEntry.COLUMN_LON + " TEXT)"
 
         private val SQL_CREATE_ENTRIES: List<String> = listOf(
-                "INSERT INTO photoMeta(photoId,photoRes,name,lon,lat) VALUES (\"1\",\"isaak_1.png\", \"Исаакиевский собор\",\"59.933032\",\"30.307523\");",
-                "INSERT INTO photoMeta(photoId,photoRes,name,lon,lat) VALUES (\"2\",\"winter_palace_1.png\",\"Зимний дворец\",\"59.940849\",\"30.313226\");",
-                "INSERT INTO photoMeta(photoId,photoRes,name,lon,lat) VALUES (\"3\",\"kazan_1.png\",\"Казанский собор\",\"59.934560\",\"30.324838\");")
+                "INSERT INTO photoMeta(photoId,photoRes,name,lon,lat) VALUES (\"1\",\"isaak_1\", \"Исаакиевский собор\",\"59.933032\",\"30.307523\");",
+                "INSERT INTO photoMeta(photoId,photoRes,name,lon,lat) VALUES (\"2\",\"winter_palace_1\",\"Зимний дворец\",\"59.940849\",\"30.313226\");",
+                "INSERT INTO photoMeta(photoId,photoRes,name,lon,lat) VALUES (\"3\",\"kazan_1\",\"Казанский собор\",\"59.934560\",\"30.324838\");")
 
 
 
