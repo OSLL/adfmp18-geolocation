@@ -33,11 +33,5 @@
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"/>
 
-        <Button
-                android:id="@+id/statsBtn"
-                android:text="@string/stats"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"/>
-
     </LinearLayout>
 </LinearLayout>
