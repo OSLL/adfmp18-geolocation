@@ -12,7 +12,9 @@ import java.util.ArrayList
 
 class photosDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(SQL_CREATE_ENTRIES)
+        db.execSQL(SQL_CREATE_TABLE)
+
+        SQL_CREATE_ENTRIES.forEach{s -> db.execSQL(s)}
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -67,7 +69,7 @@ class photosDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             cursor = db.rawQuery("select * from " + DBContract.PhotoEntry.TABLE_NAME + " WHERE " + DBContract.PhotoEntry.COLUMN_PHOTO_ID + "='" + photoid + "'", null)
         } catch (e: SQLiteException) {
             // if table not yet present, create it
-            db.execSQL(SQL_CREATE_ENTRIES)
+            SQL_CREATE_ENTRIES.forEach{s -> db.execSQL(s)}
             return ArrayList()
         }
 
@@ -89,6 +91,30 @@ class photosDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return photos
     }
 
+    fun readRandomPhoto(): PhotoModel {
+        val db = writableDatabase
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("select * from " + DBContract.PhotoEntry.TABLE_NAME + " ORDER BY RANDOM() LIMIT 1;", null)
+        } catch (e: SQLiteException) {
+            SQL_CREATE_ENTRIES.forEach{s -> db.execSQL(s)}
+            cursor = db.rawQuery("select * from " + DBContract.PhotoEntry.TABLE_NAME + " ORDER BY RANDOM() LIMIT 1;", null)
+        }
+
+        var photo = PhotoModel("", "", "", "", "")
+        if (cursor!!.moveToFirst()) {
+            var photoid = cursor.getString(cursor.getColumnIndex(DBContract.PhotoEntry.COLUMN_PHOTO_ID))
+            var name = cursor.getString(cursor.getColumnIndex(DBContract.PhotoEntry.COLUMN_NAME))
+            var res = cursor.getString(cursor.getColumnIndex(DBContract.PhotoEntry.COLUMN_PHOTO_RES))
+            var lat = cursor.getString(cursor.getColumnIndex(DBContract.PhotoEntry.COLUMN_LAT))
+            var lon = cursor.getString(cursor.getColumnIndex(DBContract.PhotoEntry.COLUMN_LON))
+
+            photo = PhotoModel(photoid, res, name, lat, lon)
+        }
+
+        return photo;
+    }
+
     fun readAllphotos(): ArrayList<PhotoModel> {
         val photos = ArrayList<PhotoModel>()
         val db = writableDatabase
@@ -96,7 +122,7 @@ class photosDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         try {
             cursor = db.rawQuery("select * from " + DBContract.PhotoEntry.TABLE_NAME, null)
         } catch (e: SQLiteException) {
-            db.execSQL(SQL_CREATE_ENTRIES)
+            SQL_CREATE_ENTRIES.forEach{s -> db.execSQL(s)}
             return ArrayList()
         }
 
@@ -124,13 +150,21 @@ class photosDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val DATABASE_VERSION = 1
         val DATABASE_NAME = "PhotoMeta.db"
 
-        private val SQL_CREATE_ENTRIES =
+        private val SQL_CREATE_TABLE =
                 "CREATE TABLE " + DBContract.PhotoEntry.TABLE_NAME + " (" +
                         DBContract.PhotoEntry.COLUMN_PHOTO_ID + " TEXT PRIMARY KEY," +
                         DBContract.PhotoEntry.COLUMN_PHOTO_RES + " TEXT," +
                         DBContract.PhotoEntry.COLUMN_NAME + " TEXT," +
                         DBContract.PhotoEntry.COLUMN_LAT + " TEXT," +
                         DBContract.PhotoEntry.COLUMN_LON + " TEXT)"
+
+        private val SQL_CREATE_ENTRIES: List<String> = listOf(
+                "INSERT INTO photoMeta(photoId,photoRes,name,lon,lat) VALUES (\"1\",\"isaak_1.png\", \"Исаакиевский собор\",\"59.933032\",\"30.307523\");",
+                "INSERT INTO photoMeta(photoId,photoRes,name,lon,lat) VALUES (\"2\",\"winter_palace_1.png\",\"Зимний дворец\",\"59.940849\",\"30.313226\");",
+                "INSERT INTO photoMeta(photoId,photoRes,name,lon,lat) VALUES (\"3\",\"kazan_1.png\",\"Казанский собор\",\"59.934560\",\"30.324838\");")
+
+
+
 
         private val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + DBContract.PhotoEntry.TABLE_NAME
     }
