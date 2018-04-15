@@ -14,10 +14,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         playBtn.setOnClickListener(::launchCamera)
+        galleryBtn.setOnClickListener(::openGallery)
     }
 
     fun launchCamera(v: View) {
         val intent = Intent(this, CameraActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun openGallery(v: View) {
+        val intent = Intent(this, GalleryActivity::class.java)
         startActivity(intent)
     }
 }
