@@ -2,7 +2,6 @@ package ru.spbau.adfmp18_geolocation
 
 import android.content.Context
 import android.graphics.Bitmap
-import org.bytedeco.javacpp.opencv_core
 
 import ru.spbau.adfmp18_geolocation.Database.photosDBHelper
 
@@ -16,7 +15,6 @@ import org.bytedeco.javacv.OpenCVFrameConverter
 
 class ImageInfo(val resId: Int, val name: String, var lat: Double, var lon: Double)
 
-//TODO: just do it!
 class ImageProcessor (context: Context){
     private val dbHelper = photosDBHelper(context)
     private val parent = context
