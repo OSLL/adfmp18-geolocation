@@ -19,7 +19,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupWindow
+import android.Manifest
 import kotlinx.android.synthetic.main.activity_camera.*
+import android.content.pm.PackageManager
+import android.support.v4.app.ActivityCompat
 
 
 class CameraActivity : AppCompatActivity() {
@@ -29,7 +32,8 @@ class CameraActivity : AppCompatActivity() {
     private val listener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
             if(!checkDistance(location)) {
-                displayAlert()
+                println("too far away")
+//                displayAlert()
             }
         }
         override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
@@ -97,6 +101,10 @@ class CameraActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+//        if (android.os.Build.VERSION.SDK_INT >= 23) {
+//             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA), 1)
+//        }
+
         imageInfo = imageProcessor.getRandomPicture()
 
         setContentView(R.layout.activity_camera)
@@ -140,7 +148,7 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun successComparison() {
-
+        println("Wow, it is alive!")
     }
 
 }
