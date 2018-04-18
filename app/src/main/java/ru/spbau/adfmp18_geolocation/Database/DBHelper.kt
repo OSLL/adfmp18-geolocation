@@ -11,8 +11,10 @@ import android.database.sqlite.SQLiteOpenHelper
 import java.util.ArrayList
 
 class photosDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+    private val parent = context
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(SQL_CREATE_TABLE)
+        assert(parent != null)
 
         SQL_CREATE_ENTRIES.forEach{s -> db.execSQL(s)}
     }
@@ -92,6 +94,7 @@ class photosDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     fun readRandomPhoto(): PhotoModel {
+        assert(writableDatabase != null)
         val db = writableDatabase
         var cursor: Cursor? = null
         try {

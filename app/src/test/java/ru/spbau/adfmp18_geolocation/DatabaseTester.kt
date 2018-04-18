@@ -43,8 +43,6 @@ class DatabaseTester {
 
         var resTable = RuntimeEnvironment.getAppResourceTable()
 
-
-
         var kaz_drawable = RuntimeEnvironment.application.resources.getDrawable(R.drawable.kazan_1)
         var image_kaz_1 = BitmapFactory.decodeResource( RuntimeEnvironment.application.resources, R.drawable.kazan_1)
         var image_kaz_2 = BitmapFactory.decodeResource(RuntimeEnvironment.application.resources, R.drawable.kazan_1)

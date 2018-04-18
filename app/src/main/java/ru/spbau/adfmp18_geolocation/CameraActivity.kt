@@ -37,7 +37,8 @@ class CameraActivity : AppCompatActivity() {
         override fun onProviderDisabled(provider: String) {}
     }
     private val imageProcessor = ImageProcessor(this)
-    private val imageInfo: ImageInfo = imageProcessor.getRandomPicture()
+    private var imageInfo: ImageInfo? = null
+
     private val mPicture = object : PictureCallback {
 
         override fun onPictureTaken(data: ByteArray, camera: Camera) {
@@ -46,13 +47,9 @@ class CameraActivity : AppCompatActivity() {
 
             val img  = BitmapFactory.decodeByteArray(data, 0, data.size)
 
-
-            // TODO: use a server handler for comparison
-            // e.g.
-            // bool handler(byte[] data)
-            //
-            // if matched, proceed to win screen
-            // otherwise, back to camera
+            if(imageProcessor.compareImages(target, img)) {
+                successComparison()
+            }
         }
     }
 
@@ -99,8 +96,11 @@ class CameraActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        imageInfo = imageProcessor.getRandomPicture()
+
         setContentView(R.layout.activity_camera)
-        camera_image.setImageResource(imageInfo.resId)
+        camera_image.setImageResource(imageInfo?.resId!!)
 
         // because it's kotlin
         manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager?
@@ -131,8 +131,16 @@ class CameraActivity : AppCompatActivity() {
         pop.showAsDropDown(popupView, 50, -30)
     }
 
-    private fun checkDistance(location: Location): Boolean {
-        return true
+    private fun checkDistance(from: Location): Boolean {
+        val to = Location(LocationManager.GPS_PROVIDER)
+        to.latitude = imageInfo?.lat!!
+        to.longitude = imageInfo?.lon!!
+
+        return from.distanceTo(to) < 1000
+    }
+
+    private fun successComparison() {
+
     }
 
 }
