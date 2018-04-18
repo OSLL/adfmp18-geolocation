@@ -20,6 +20,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources true
+        }
+    }
 }
 
 dependencies {
@@ -34,7 +39,12 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:3.8'
     compile 'com.github.google:cameraview:d0b508a5ea'
-    implementation 'org.bytedeco.javacpp-presets:opencv:3.4.1-1.4.1'
+
+    implementation files('libs/javacpp.jar')
+    implementation files('libs/javacv.jar')
+    implementation files('libs/opencv.jar')
+    implementation files('libs/opencv-android-arm.jar')
+    implementation files('libs/opencv-linux-x86_64.jar')
 }
 
 repositories {
