@@ -1,75 +1,90 @@
 package ru.spbau.adfmp18_geolocation
 
 import android.content.Context
-import org.opencv.core.*
+import android.graphics.Bitmap
+import org.bytedeco.javacpp.opencv_core
 
 import ru.spbau.adfmp18_geolocation.Database.photosDBHelper
 
-import org.opencv.features2d.DescriptorExtractor;
-import org.opencv.features2d.DescriptorMatcher;
-import org.opencv.features2d.FeatureDetector;
-import org.opencv.imgproc.Imgproc;
+
+import org.bytedeco.javacpp.opencv_core.*
+import org.bytedeco.javacpp.opencv_features2d
+import org.bytedeco.javacpp.opencv_xfeatures2d
+import org.bytedeco.javacv.AndroidFrameConverter
+import org.bytedeco.javacv.OpenCVFrameConverter
+
+
+class ImageInfo(val resId: Int, val name: String, var lat: Double, var lon: Double)
 
 //TODO: just do it!
 class ImageProcessor (context: Context){
     private val dbHelper = photosDBHelper(context)
     private val parent = context
 
-    fun getRandomPicture(): Int {
+    fun getRandomPicture(): ImageInfo {
         var entry = dbHelper.readRandomPhoto()
 
-        val resources = parent.getResources()
+        val resources = parent.resources
         val resourceId = resources.getIdentifier(entry.photoRes, "drawable",
-                parent.getPackageName())
+                parent.packageName)
 
-
-        return resourceId
+        return ImageInfo(resourceId, entry.photoName, entry.photoLat.toDouble(), entry.photoLon.toDouble())
     }
 
-    fun compareImages(left: ByteArray, leftw: Int, lefth: Int, right: ByteArray, rightw: Int, righth: Int): Boolean {
-        var matL = Mat(lefth, leftw, CvType.CV_8U)
-        var matR = Mat(righth, rightw, CvType.CV_8U)
+    fun compareImages(left: Bitmap, right: Bitmap): Boolean {
+        var images = arrayOf(bitmapToMat(left), bitmapToMat(right))
 
-        matL.put(lefth, leftw, left)
-        matR.put(righth, rightw, right)
+        val hessianThreshold = 2500.0
+        val nOctaves = 4
+        val nOctaveLayers = 2
+        val extended = true
+        val upright = false
+        val surf = opencv_xfeatures2d.SURF.create(hessianThreshold, nOctaves, nOctaveLayers, extended, upright)
+        //  val surfDesc = DescriptorExtractor.create("SURF")
+        //  val surfDesc = SurfDescriptorExtractor.create("SURF")
+        var keyPoints = arrayOf(KeyPointVector(), KeyPointVector())
+        var descriptors = arrayOf(Mat(), Mat())
 
-        Imgproc.cvtColor(matL, matL, Imgproc.COLOR_RGB2GRAY)
-        Imgproc.cvtColor(matR, matR, Imgproc.COLOR_RGB2GRAY)
-
-
-        var detector = FeatureDetector.create(FeatureDetector.ORB)
-        var descriptor = DescriptorExtractor.create(DescriptorExtractor.ORB)
-        var matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE_HAMMING)
-
-        var descriptorsLeft = Mat()
-        var keypointsLeft = MatOfKeyPoint()
-
-        detector.detect(matL, keypointsLeft)
-        descriptor.compute(matL, keypointsLeft, descriptorsLeft)
-
-        var descriptorsRight = Mat()
-        var keypointsRight = MatOfKeyPoint()
-
-        detector.detect(matR, keypointsRight)
-        descriptor.compute(matR, keypointsRight, descriptorsRight)
-
-        var matches = MatOfDMatch()
-
-        matcher.match(descriptorsLeft, descriptorsRight, matches)
-
-        var matchesList = matches.toList()
-        var minDist = matchesList.minBy { m -> m.distance }
-
-        var minVal: Float
-
-        if(minDist != null) {
-            minVal = minDist.distance
-        } else {
-            minVal = (1.0).toFloat()
+        for (i in 0..1) {
+            surf.detect(images[i], keyPoints[i])
+            surf.compute(images[i], keyPoints[i], descriptors[i])
         }
 
-        var posCount = matchesList.count { m -> m.distance < minVal*2.0 }
+        val matcher = opencv_features2d.BFMatcher(NORM_L2, false)
 
-        return (1.0*posCount/matchesList.size) > 0.5
+        var matches = DMatchVector()
+        matcher.match(descriptors[0], descriptors[1], matches)
+
+        // Я даже не представляю почему, но почему-то по этому вектору нельзя нормально итерироваться
+        // И нельзя нормально конвертнуть его в список
+        var minDist = (100.0).toFloat()
+        var it = matches.begin()
+        while(it != matches.end()) {
+            var currMatch = it.get()
+            minDist = minOf(currMatch.distance(), minDist)
+
+            it = it.increment()
+        }
+
+        var goodMatches = 0
+        it = matches.begin()
+        while(it != matches.end()) {
+            var currMatch = it.get()
+            if(currMatch.distance() < minDist*2) {
+                goodMatches += 1
+            }
+
+            it = it.increment()
+        }
+
+        return (1.0*goodMatches / matches.size()) > 0.5
+    }
+
+    fun bitmapToMat(src: Bitmap): Mat {
+        var tmp = src.copy(Bitmap.Config.ARGB_8888, true)
+        var bitmapToFrame = AndroidFrameConverter()
+        var frameToMat = OpenCVFrameConverter.ToMat()
+
+        return frameToMat.convert(bitmapToFrame.convert(tmp))
     }
 }
