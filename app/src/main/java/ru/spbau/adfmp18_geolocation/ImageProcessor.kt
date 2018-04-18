@@ -2,19 +2,19 @@ package ru.spbau.adfmp18_geolocation
 
 import android.content.Context
 import android.graphics.Bitmap
+import org.bytedeco.javacpp.opencv_core
 
 import ru.spbau.adfmp18_geolocation.Database.photosDBHelper
 
 
 import org.bytedeco.javacpp.opencv_core.*
-import org.bytedeco.javacpp.opencv_core.Mat
 import org.bytedeco.javacpp.opencv_features2d
 import org.bytedeco.javacpp.opencv_xfeatures2d
 import org.bytedeco.javacv.AndroidFrameConverter
 import org.bytedeco.javacv.OpenCVFrameConverter
 
 
-class ImageInfo(val resId: Int, val name: String)
+class ImageInfo(val resId: Int, val name: String, var lat: Double, var lon: Double)
 
 //TODO: just do it!
 class ImageProcessor (context: Context){
@@ -28,7 +28,7 @@ class ImageProcessor (context: Context){
         val resourceId = resources.getIdentifier(entry.photoRes, "drawable",
                 parent.packageName)
 
-        return ImageInfo(resourceId, entry.photoName)
+        return ImageInfo(resourceId, entry.photoName, entry.photoLat.toDouble(), entry.photoLon.toDouble())
     }
 
     fun compareImages(left: Bitmap, right: Bitmap): Boolean {
