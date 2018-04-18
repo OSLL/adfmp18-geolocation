@@ -1,9 +1,13 @@
 package ru.spbau.adfmp18_geolocation
 
+import android.content.Context
 import android.content.Intent
 import android.hardware.Camera
 import android.hardware.Camera.PictureCallback
 import android.hardware.Camera.getNumberOfCameras
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -13,8 +17,18 @@ import kotlinx.android.synthetic.main.activity_camera.*
 
 
 class CameraActivity : AppCompatActivity() {
-
     private val TAG = "CameraActivity"
+    private val manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    private val listener: LocationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            if(!checkDistance(location)) {
+                displayAlert()
+            }
+        }
+        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
+        override fun onProviderEnabled(provider: String) {}
+        override fun onProviderDisabled(provider: String) {}
+    }
 
     private val mPicture = object : PictureCallback {
 
@@ -87,6 +101,15 @@ class CameraActivity : AppCompatActivity() {
     override fun onPause() {
         camera.stop()
         super.onPause()
+    }
+
+    private fun displayAlert()
+    {
+        // TODO: display alert, friend!
+    }
+
+    private fun checkDistance(location: Location) {
+        
     }
 
 }

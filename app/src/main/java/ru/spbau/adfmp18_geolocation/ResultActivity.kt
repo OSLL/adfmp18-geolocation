@@ -30,5 +30,4 @@ class ResultActivity : AppCompatActivity() {
         res_to_main_button.setOnClickListener(::toMainMenu)
         res_to_play_button.setOnClickListener(::continueGame)
     }
-
 }
