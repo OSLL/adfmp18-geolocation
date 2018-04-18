@@ -12,7 +12,10 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.PopupWindow
 import kotlinx.android.synthetic.main.activity_camera.*
 
 
@@ -87,6 +90,8 @@ class CameraActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, (10.0).toFloat(), listener)
+
 // TODO:        val mCamera = getCameraInstance()
         capture_button.setOnClickListener(::showResults)
 // TODO: { _ -> mCamera?.takePicture(null, null, mPicture)})
@@ -105,11 +110,15 @@ class CameraActivity : AppCompatActivity() {
 
     private fun displayAlert()
     {
-        // TODO: display alert, friend!
+        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        var popupView = inflater.inflate(R.layout.activity_camera, null)
+        val pop = PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT,  ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        pop.showAsDropDown(popupView, 50, -30);
     }
 
-    private fun checkDistance(location: Location) {
-        
+    private fun checkDistance(location: Location): Boolean {
+        return true
     }
 
 }
