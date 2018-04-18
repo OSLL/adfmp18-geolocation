@@ -2,6 +2,8 @@ package ru.spbau.adfmp18_geolocation
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.hardware.Camera
 import android.hardware.Camera.PictureCallback
 import android.hardware.Camera.getNumberOfCameras
@@ -15,6 +17,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.PopupWindow
 import kotlinx.android.synthetic.main.activity_camera.*
 
@@ -38,6 +41,12 @@ class CameraActivity : AppCompatActivity() {
     private val mPicture = object : PictureCallback {
 
         override fun onPictureTaken(data: ByteArray, camera: Camera) {
+            val view = findViewById<ImageView>(R.id.camera_image)
+            val target = (view.drawable as BitmapDrawable).bitmap
+
+            val img  = BitmapFactory.decodeByteArray(data, 0, data.size)
+
+
             // TODO: use a server handler for comparison
             // e.g.
             // bool handler(byte[] data)
@@ -119,7 +128,7 @@ class CameraActivity : AppCompatActivity() {
         var popupView = inflater.inflate(R.layout.activity_camera, null)
         val pop = PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT,  ViewGroup.LayoutParams.WRAP_CONTENT)
 
-        pop.showAsDropDown(popupView, 50, -30);
+        pop.showAsDropDown(popupView, 50, -30)
     }
 
     private fun checkDistance(location: Location): Boolean {

@@ -78,10 +78,10 @@ class ImageProcessor (context: Context){
         return (1.0*goodMatches / matches.size()) > 0.5
     }
 
-    fun bitmapToMat(src: Bitmap): Mat {
-        var tmp = src.copy(Bitmap.Config.ARGB_8888, true)
-        var bitmapToFrame = AndroidFrameConverter()
-        var frameToMat = OpenCVFrameConverter.ToMat()
+    private fun bitmapToMat(src: Bitmap): Mat {
+        val tmp = src.copy(Bitmap.Config.ARGB_8888, true)
+        val bitmapToFrame = AndroidFrameConverter()
+        val frameToMat = OpenCVFrameConverter.ToMat()
 
         return frameToMat.convert(bitmapToFrame.convert(tmp))
     }
