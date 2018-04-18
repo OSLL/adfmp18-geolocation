@@ -11,16 +11,29 @@ import kotlinx.android.synthetic.main.activity_gallery.*
 
 class GalleryActivity : AppCompatActivity() {
 
+    private var touchLocationX = 0
+    private var touchLocationY = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
 
         gridview.adapter = ImageAdapter(this)
 
-        gridview.onItemClickListener =
-                AdapterView.OnItemClickListener { parent, v, position, id ->
-                    val toast = Toast.makeText(this, R.string.some_picture_text, Toast.LENGTH_LONG)
-                    toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, position)
-                    toast.show()
-                }
+        gridview.setOnItemClickListener { parent, v, position, id ->
+            var a: Toast = Toast.makeText(this@GalleryActivity, R.string.some_picture_text, Toast.LENGTH_LONG)
+            a.setGravity(Gravity.NO_GRAVITY, touchLocationX, touchLocationY)
+            a.show()
+        }
+//                AdapterView.OnItemClickListener { parent, v, position, id ->
+//                    val toast = Toast.makeText(this, R.string.some_picture_text, Toast.LENGTH_LONG)
+//                    toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, position)
+//                    toast.show()
+//                }
+
+        gridview.setOnTouchListener { v, event ->
+            touchLocationX = event.x.toInt()
+            touchLocationY = event.y.toInt()
+            return@setOnTouchListener super.onTouchEvent(event)
+        }
     }}

@@ -20,8 +20,9 @@ import kotlinx.android.synthetic.main.activity_camera.*
 
 
 class CameraActivity : AppCompatActivity() {
+
     private val TAG = "CameraActivity"
-    private val manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    private var manager : LocationManager? = null
     private val listener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
             if(!checkDistance(location)) {
@@ -32,7 +33,8 @@ class CameraActivity : AppCompatActivity() {
         override fun onProviderEnabled(provider: String) {}
         override fun onProviderDisabled(provider: String) {}
     }
-
+    private val imageProcessor = ImageProcessor(this)
+    private val imageInfo: ImageInfo = imageProcessor.getRandomPicture()
     private val mPicture = object : PictureCallback {
 
         override fun onPictureTaken(data: ByteArray, camera: Camera) {
@@ -89,8 +91,11 @@ class CameraActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
+        camera_image.setImageResource(imageInfo.resId)
 
-        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, (10.0).toFloat(), listener)
+        // because it's kotlin
+        manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager?
+        manager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, (10.0).toFloat(), listener)
 
 // TODO:        val mCamera = getCameraInstance()
         capture_button.setOnClickListener(::showResults)

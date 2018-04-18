@@ -8,7 +8,10 @@ import android.view.View
 
 import kotlinx.android.synthetic.main.activity_result.*
 
-class ResultActivity : AppCompatActivity() {
+class
+
+
+ResultActivity : AppCompatActivity() {
 
     private val TAG = "ResultActivity"
 
