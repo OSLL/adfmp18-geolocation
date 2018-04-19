@@ -21,7 +21,7 @@ class GalleryActivity : AppCompatActivity() {
         gridview.adapter = ImageAdapter(this)
 
         gridview.setOnItemClickListener { parent, v, position, id ->
-            var a: Toast = Toast.makeText(this@GalleryActivity, R.string.some_picture_text, Toast.LENGTH_SHORT)
+            val a: Toast = Toast.makeText(this@GalleryActivity, R.string.some_picture_text, Toast.LENGTH_SHORT)
             a.setGravity(Gravity.NO_GRAVITY, touchLocationX, touchLocationY)
             a.show()
         }
