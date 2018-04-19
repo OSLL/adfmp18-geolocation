@@ -36,8 +36,8 @@ class DatabaseTester {
     }
 
     @Test
-    fun testCompareImages() { var proc = ImageProcessor(RuntimeEnvironment.application)
-
+    fun testCompareImages() {
+        var proc = ImageProcessor(RuntimeEnvironment.application)
         var image_kaz_1 = getBitmapFromURL("http://globus.aquaviva.ru/upload/iblock/ee4/kazanskiy-sobor.jpg")
         var image_kaz_2 = getBitmapFromURL("http://kazansky-spb.ru/image/gallery/1.jpg")
         var image_zinger = getBitmapFromURL("http://www.visit-petersburg.ru/media/uploads/audioguide/38/38_cover.jpg.1050x500_q95_crop_upscale.jpg")
