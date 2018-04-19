@@ -10,6 +10,7 @@
     <string name="_continue">Continue</string>
     <string name="title_activity_gallery">Your Gallery</string>
     <string name="some_picture_text">The cake is a lie</string>
+    <string name="photo_not_matched">Your photo is a cake. The cake is a lie. Try again.</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

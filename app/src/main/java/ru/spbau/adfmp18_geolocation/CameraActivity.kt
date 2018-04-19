@@ -14,15 +14,14 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupWindow
-import android.Manifest
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_camera.*
-import android.content.pm.PackageManager
-import android.support.v4.app.ActivityCompat
 
 
 class CameraActivity : AppCompatActivity() {
@@ -54,6 +53,10 @@ class CameraActivity : AppCompatActivity() {
             if(imageProcessor.compareImages(target, img)) {
                 val intent = Intent(this@CameraActivity, ResultActivity::class.java)
                 startActivity(intent)
+            } else {
+                val a: Toast = Toast.makeText(this@CameraActivity, R.string.photo_not_matched, Toast.LENGTH_SHORT)
+                a.setGravity(Gravity.CENTER, 0, 0)
+                a.show()
             }
         }
     }
