@@ -75,6 +75,8 @@ class ImageProcessor (context: Context){
             it = it.increment()
         }
 
+        val totalSize = matches.size()
+        println("$goodMatches of $totalSize")
         return (1.0*goodMatches / matches.size()) > 0.5
     }
 
@@ -83,6 +85,9 @@ class ImageProcessor (context: Context){
         val bitmapToFrame = AndroidFrameConverter()
         val frameToMat = OpenCVFrameConverter.ToMat()
 
-        return frameToMat.convert(bitmapToFrame.convert(tmp))
+        val fr = bitmapToFrame.convert(src)
+        val res = frameToMat.convert(fr)
+
+        return res
     }
 }
