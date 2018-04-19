@@ -22,3 +22,6 @@
   * On the main screen N. presses the "Stats" / "Gallery" button. 
   The results are displayed.
   * To go back to the main screen, they press the "Menu" button.
+  
+## UI complexity analisys
+[Google sheet](https://docs.google.com/spreadsheets/d/1TphV-zIdyEqJmOfYd3zxAO_msZUzpc_x7AshTCnOepA/edit?usp=sharing)
