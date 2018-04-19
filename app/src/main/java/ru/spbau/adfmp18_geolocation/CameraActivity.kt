@@ -52,7 +52,8 @@ class CameraActivity : AppCompatActivity() {
             val img  = BitmapFactory.decodeByteArray(data, 0, data.size)
 
             if(imageProcessor.compareImages(target, img)) {
-                successComparison()
+                val intent = Intent(this@CameraActivity, ResultActivity::class.java)
+                startActivity(intent)
             }
         }
     }
@@ -150,5 +151,4 @@ class CameraActivity : AppCompatActivity() {
     private fun successComparison() {
         println("Wow, it is alive!")
     }
-
 }

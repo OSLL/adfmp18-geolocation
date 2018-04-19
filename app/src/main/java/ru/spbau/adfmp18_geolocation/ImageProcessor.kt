@@ -52,32 +52,27 @@ class ImageProcessor (context: Context){
 
         var matches = DMatchVector()
         matcher.match(descriptors[0], descriptors[1], matches)
+        val totalSize = matches.size()
 
-        // Я даже не представляю почему, но почему-то по этому вектору нельзя нормально итерироваться
-        // И нельзя нормально конвертнуть его в список
         var minDist = (100.0).toFloat()
-        var it = matches.begin()
-        while(it != matches.end()) {
-            var currMatch = it.get()
+        for(i in 0..totalSize - 1)
+        {
+            var currMatch = matches[i]
             minDist = minOf(currMatch.distance(), minDist)
-
-            it = it.increment()
         }
 
         var goodMatches = 0
-        it = matches.begin()
-        while(it != matches.end()) {
-            var currMatch = it.get()
-            if(currMatch.distance() < minDist*2) {
+        var EPS = 0.05
+        for(i in 0..totalSize - 1)
+        {
+            var currMatch = matches[i]
+            if(currMatch.distance() < minDist*1.5 + EPS) {
                 goodMatches += 1
             }
-
-            it = it.increment()
         }
 
-        val totalSize = matches.size()
         println("$goodMatches of $totalSize")
-        return (1.0*goodMatches / matches.size()) > 0.5
+        return (1.0*goodMatches / matches.size()) > 0.25
     }
 
     private fun bitmapToMat(src: Bitmap): Mat {
@@ -85,7 +80,7 @@ class ImageProcessor (context: Context){
         val bitmapToFrame = AndroidFrameConverter()
         val frameToMat = OpenCVFrameConverter.ToMat()
 
-        val fr = bitmapToFrame.convert(src)
+        val fr = bitmapToFrame.convert(tmp)
         val res = frameToMat.convert(fr)
 
         return res
