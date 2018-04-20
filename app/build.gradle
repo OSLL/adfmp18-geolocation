@@ -49,6 +49,9 @@ dependencies {
     implementation files('libs/opencv.jar')
     implementation files('libs/opencv-android-arm.jar')
     implementation files('libs/opencv-linux-x86_64.jar')
+
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:3.0.1'
 }
 
 repositories {
