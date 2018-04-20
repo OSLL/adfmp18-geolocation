@@ -1,7 +1,9 @@
 package ru.spbau.adfmp18_geolocation
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.hardware.Camera
@@ -11,6 +13,8 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -21,6 +25,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.Toast
+import com.google.android.cameraview.CameraView
 import kotlinx.android.synthetic.main.activity_camera.*
 
 
@@ -72,7 +77,7 @@ class CameraActivity : AppCompatActivity() {
     /** A safe way to get an instance of the Camera object.  */
     private fun getCameraInstance(): Camera? {
         var c: Camera? = null
-        for (i in 0 until getNumberOfCameras()) {
+        for (i in 1 until getNumberOfCameras()) {
             try {
                 c = Camera.open(i) // attempt to get a Camera instance
                 Log.e(TAG, "Camera $i here, Cap'n!")
@@ -118,15 +123,35 @@ class CameraActivity : AppCompatActivity() {
         manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager?
         manager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, (10.0).toFloat(), listener)
 
-// TODO:        val mCamera = getCameraInstance()
-        capture_button.setOnClickListener(::showResults)
-// TODO: { _ -> mCamera?.takePicture(null, null, mPicture)})
+//        val mCamera = getCameraInstance()
+//         capture_button.setOnClickListener(::showResults)
+//        capture_button.setOnClickListener { _ -> mCamera?.takePicture(null, null, mPicture)}
 
+        camera.addCallback(object : CameraView.Callback() {
+
+            override fun onCameraOpened(cameraView: CameraView?) {
+                Log.d(TAG, "OnCameraOpened")
+            }
+
+            override fun onCameraClosed(cameraView: CameraView?) {
+                Log.d(TAG, "OnCameraClosed")
+            }
+
+            override fun onPictureTaken(cameraView: CameraView?, data: ByteArray?) {
+                Log.d(TAG, "OnPictureTaken")
+            }
+        })
+        capture_button.setOnClickListener {camera.takePicture()}
     }
 
     override fun onResume() {
         super.onResume()
-        camera.start()
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED) {
+            camera.start();
+        } else {
+            ActivityCompat.requestPermissions(this,  arrayOf(Manifest.permission.CAMERA), 1);
+        }
     }
 
     override fun onPause() {
