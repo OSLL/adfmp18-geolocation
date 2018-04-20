@@ -21,6 +21,7 @@ android {
         }
 
     }
+
     testOptions {
         unitTests {
             includeAndroidResources true
@@ -41,11 +42,16 @@ dependencies {
     testCompile 'org.robolectric:robolectric:3.8'
     compile 'com.github.google:cameraview:d0b508a5ea'
 
+//    compile group: 'org.bytedeco', name: 'javacv-platform', version: '1.4.1'
+
     implementation files('libs/javacpp.jar')
     implementation files('libs/javacv.jar')
     implementation files('libs/opencv.jar')
     implementation files('libs/opencv-android-arm.jar')
     implementation files('libs/opencv-linux-x86_64.jar')
+
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:3.0.1'
 }
 
 repositories {

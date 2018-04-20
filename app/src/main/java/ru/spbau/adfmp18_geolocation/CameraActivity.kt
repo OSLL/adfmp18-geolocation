@@ -19,11 +19,8 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.PopupWindow
 import android.widget.Toast
 import com.google.android.cameraview.CameraView
 import kotlinx.android.synthetic.main.activity_camera.*
@@ -36,8 +33,7 @@ class CameraActivity : AppCompatActivity() {
     private val listener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
             if(!checkDistance(location)) {
-                println("too far away")
-//                displayAlert()
+                displayAlert()
             }
         }
         override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
@@ -121,7 +117,7 @@ class CameraActivity : AppCompatActivity() {
 
         // because it's kotlin
         manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager?
-        manager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, (10.0).toFloat(), listener)
+        manager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, (10.0).toFloat(), listener)
 
 //        val mCamera = getCameraInstance()
 //         capture_button.setOnClickListener(::showResults)
@@ -161,11 +157,11 @@ class CameraActivity : AppCompatActivity() {
 
     private fun displayAlert()
     {
-        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        var popupView = inflater.inflate(R.layout.activity_camera, null)
-        val pop = PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT,  ViewGroup.LayoutParams.WRAP_CONTENT)
+        val text = "You are too far away from destination!"
+        val duration = Toast.LENGTH_SHORT
 
-        pop.showAsDropDown(popupView, 50, -30)
+        val toast = Toast.makeText(this, text, duration)
+        toast.show()
     }
 
     private fun checkDistance(from: Location): Boolean {
@@ -175,9 +171,4 @@ class CameraActivity : AppCompatActivity() {
 
         return from.distanceTo(to) < 1000
     }
-
-    private fun successComparison() {
-        println("Wow, it is alive!")
-    }
-
 }
