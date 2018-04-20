@@ -24,4 +24,4 @@
   * To go back to the main screen, they press the "Menu" button.
   
 ## UI complexity analisys
-[Google sheet](https://docs.google.com/spreadsheets/d/1TphV-zIdyEqJmOfYd3zxAO_msZUzpc_x7AshTCnOepA/edit?usp=sharing)
+[Google sheet](https://docs.google.com/spreadsheets/d/1TphV-zIdyEqJmOfYd3zxAO_msZUzpc_x7AshTCnOepA/edit?usp=sharing) containing the initial analisys, some improvement suggestions and a draft.
