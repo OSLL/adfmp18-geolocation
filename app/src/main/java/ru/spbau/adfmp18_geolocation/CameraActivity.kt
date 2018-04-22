@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.hardware.Camera
 import android.hardware.Camera.PictureCallback
@@ -23,6 +24,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import com.google.android.cameraview.CameraView
+import com.pnikosis.materialishprogress.ProgressWheel
 import kotlinx.android.synthetic.main.activity_camera.*
 
 
@@ -135,6 +137,11 @@ class CameraActivity : AppCompatActivity() {
 
             override fun onPictureTaken(cameraView: CameraView?, data: ByteArray?) {
                 Log.d(TAG, "OnPictureTaken")
+                if(data != null) {
+                    checkPicture(data)
+                } else {
+                    Log.d(TAG, "PictureIsNull")
+                }
             }
         })
         capture_button.setOnClickListener {camera.takePicture()}
@@ -170,5 +177,27 @@ class CameraActivity : AppCompatActivity() {
         to.longitude = imageInfo?.lon!!
 
         return from.distanceTo(to) < 1000
+    }
+
+    private fun checkPicture(data: ByteArray) {
+        var wheel = ProgressWheel(this@CameraActivity)
+        wheel.barColor = Color.BLUE
+        wheel.spin()
+
+        val view = findViewById<ImageView>(R.id.camera_image)
+        val target = (view.drawable as BitmapDrawable).bitmap
+
+        val img  = BitmapFactory.decodeByteArray(data, 0, data.size)
+
+        if(imageProcessor.compareImages(target, img)) {
+            val intent = Intent(this@CameraActivity, ResultActivity::class.java)
+            startActivity(intent)
+        } else {
+            val a: Toast = Toast.makeText(this@CameraActivity, R.string.photo_not_matched, Toast.LENGTH_SHORT)
+            a.setGravity(Gravity.CENTER, 0, 0)
+            a.show()
+        }
+
+        wheel.stopSpinning()
     }
 }
