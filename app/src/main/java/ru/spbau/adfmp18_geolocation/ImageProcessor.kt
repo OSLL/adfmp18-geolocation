@@ -73,6 +73,7 @@ class ImageProcessor (context: Context){
 
         println("$goodMatches of $totalSize")
         return (1.0*goodMatches / matches.size()) > 0.25
+
     }
 
     private fun bitmapToMat(src: Bitmap): Mat {

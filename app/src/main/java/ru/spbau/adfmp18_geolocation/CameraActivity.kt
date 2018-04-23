@@ -21,6 +21,7 @@ import android.widget.Toast
 import com.google.android.cameraview.CameraView
 import com.pnikosis.materialishprogress.ProgressWheel
 import kotlinx.android.synthetic.main.activity_camera.*
+import kotlin.concurrent.thread
 
 
 class CameraActivity : AppCompatActivity() {
@@ -118,9 +119,10 @@ class CameraActivity : AppCompatActivity() {
         val view = findViewById<ImageView>(R.id.camera_image)
         val target = (view.drawable as BitmapDrawable).bitmap
 
-        val img  = BitmapFactory.decodeByteArray(data, 0, data.size)
+        val img = BitmapFactory.decodeByteArray(data, 0, data.size)
+        val areEqual = imageProcessor.compareImages(target, img)
 
-        if(imageProcessor.compareImages(target, img)) {
+        if(areEqual) {
             val intent = Intent(this@CameraActivity, ResultActivity::class.java)
             startActivity(intent)
         } else {
