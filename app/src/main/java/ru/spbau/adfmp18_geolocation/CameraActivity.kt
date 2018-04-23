@@ -26,6 +26,7 @@ import kotlin.concurrent.thread
 
 class CameraActivity : AppCompatActivity() {
 
+    private val MY_PERMISSIONS = 42
     private val TAG = "CameraActivity"
     private var manager : LocationManager? = null
     private val listener: LocationListener = object : LocationListener {
@@ -44,9 +45,9 @@ class CameraActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        if (android.os.Build.VERSION.SDK_INT >= 23) {
-//             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA), 1)
-//        }
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+             askPermissions()
+        }
 
         imageInfo = imageProcessor.getRandomPicture()
 
@@ -132,5 +133,33 @@ class CameraActivity : AppCompatActivity() {
         }
 
         wheel.stopSpinning()
+    }
+
+    private fun askPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION), MY_PERMISSIONS)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            MY_PERMISSIONS -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    println("Permissions granted!")
+
+                } else {
+                    println("WTF, permissions are required!")
+                    finish()
+
+                }
+            }
+            else -> {
+                // Ignore all other requests.
+            }
+        }
     }
 }
